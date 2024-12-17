@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scroll Image Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Ensures images are square */
+            object-fit: cover; /* Ensures the images fill the square without distortion */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        #loading {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #loading img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery" id="gallery">
+        <!-- Initial images will be loaded here -->
+    </div>
+    <div id="loading">
+        <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading...">
+    </div>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        const loading = document.getElementById('loading');
+
+        let loadingInProgress = false;
+
+        // Predefined set of images
+        const imageSources = [
+            // 'https://via.placeholder.com/250x250?text=Image+1',
+            // 'https://via.placeholder.com/250x250?text=Image+2',
+            // 'https://via.placeholder.com/250x250?text=Image+3',
+            // 'https://via.placeholder.com/250x250?text=Image+4',
+            // 'https://via.placeholder.com/250x250?text=Image+5',
+            // 'https://via.placeholder.com/250x250?text=Image+6',
+            'images/1.png',
+            'images/2.png',
+            // 'images/3.png',
+            'images/4.png',
+            'images/5.png',
+            'images/6.png',
+            'images/7.png',
+            'images/8.png',
+            'images/9.png',
+            'images/10.png',
+            'images/11.png',
+            'images/12.png',
+        ];
+
+        let currentIndex = 0;
+
+        // Function to create image elements
+        function createImage(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            return img;
+        }
+
+        // Function to load images
+        function loadImages() {
+            if (loadingInProgress) return;
+
+            loadingInProgress = true;
+            loading.style.display = 'block';
+
+            setTimeout(() => {
+                for (let i = 0; i < 12; i++) {
+                    const img = createImage(imageSources[currentIndex]);
+                    gallery.appendChild(img);
+
+                    currentIndex = (currentIndex + 1) % imageSources.length;
+                }
+
+                loading.style.display = 'none';
+                loadingInProgress = false;
+            }, 1000);
+        }
+
+        // Infinite scroll logic
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                loadImages();
+            }
+        });
+
+        // Initial load
+        loadImages();
+    </script>
+</body>
+</html>
